@@ -1451,9 +1451,10 @@ export default class CognitoUser {
 	 * @param {CognitoRefreshToken} refreshToken A previous session's refresh token.
 	 * @param {nodeCallback<CognitoUserSession>} callback Called on success or error.
 	 * @param {ClientMetadata} clientMetadata object which is passed from client to Cognito Lambda trigger
+	 * @param {string} deviceKey Device key - optional.
 	 * @returns {void}
 	 */
-	refreshSession(refreshToken, callback, clientMetadata) {
+	refreshSession(refreshToken, callback, clientMetadata, deviceKey) {
 		const wrappedCallback = this.pool.wrapRefreshSessionCallback
 			? this.pool.wrapRefreshSessionCallback(callback)
 			: callback;
@@ -1467,6 +1468,10 @@ export default class CognitoUser {
 			const deviceKeyKey = `${keyPrefix}.${this.username}.deviceKey`;
 			this.deviceKey = this.storage.getItem(deviceKeyKey);
 			authParameters.DEVICE_KEY = this.deviceKey;
+		}
+
+		if (deviceKey) {
+			authParameters.DEVICE_KEY = deviceKey;
 		}
 
 		const jsonReq = {
