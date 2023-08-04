@@ -79,6 +79,7 @@ declare module 'amazon-cognito-identity-js' {
 
 	export interface GetSessionOptions {
 		clientMetadata: Record<string, string>;
+		deviceKey: string;
 	}
 
 	export type ChallengeName =
